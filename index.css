@@ -1,0 +1,72 @@
+* {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    
+    /*
+     * https://stackoverflow.com/questions/14068103/disable-antialising-when-scaling-images
+     */
+    image-rendering: optimizeSpeed;             /* STOP SMOOTHING, GIVE ME SPEED    */
+    image-rendering: -moz-crisp-edges;          /* Firefox                          */
+    image-rendering: -o-crisp-edges;            /* Opera                            */
+    image-rendering: -webkit-optimize-contrast; /* Chrome (and eventually Safari)   */
+    image-rendering: pixelated;                 /* Chrome                           */
+    image-rendering: optimize-contrast;         /* CSS3 Proposed                    */
+    -ms-interpolation-mode: nearest-neighbor;   /* IE8+                             */
+}
+.player {
+    background-image: url(./player.gif);
+    background-size: 400%; /* 広い辺のチップ数 * 100% */
+    display: none;
+    width: 64px;
+    height: 64px;
+}
+.player-wait {
+    background-position: 0 0;
+}
+.player-go1 {
+    background-position: -64px 0;
+}
+.player-go2 {
+    background-position: -128px 0;    
+}
+.player-jump {
+    background-position: -192px 0;
+}
+.player-crouch {
+    height: 32px;
+    background-size: 400% 100%;
+    margin-top: 32px;
+}
+.player-turn {
+    transform: scale(-1, 1);
+}
+.map-container {
+    width: 800px;
+    height: 600px;
+    display: none;
+}
+.map {
+    background-image: url(./maptip.gif);
+    background-size: 600%; /* 広い辺のチップ数 * 100% */
+    width: 64px;
+    height: 64px;
+}
+.map-floor {
+    background-position: 0 0;
+}
+.map-mt-left {
+    background-position: -64px 0;
+}
+.map-mt-top {
+    background-position: -128px 0;
+}
+.map-mt-right {
+    background-position: -192px 0;
+}
+.map-mt-bottom {
+    background-position: -256px 0;
+}
+.map-sky {
+    background-position: -320px 0;
+}
