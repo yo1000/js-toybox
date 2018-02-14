@@ -2,329 +2,34 @@
 <html>
 <head>
 <meta charset="utf-8">
-<link rel="stylesheet" type="text/css" href="index.css">
+<link rel="stylesheet" type="text/css" href="./index.css">
 </head>
 <body>
 <div id="map-container" class="map-container"></div>
 <p id="player" class="player"></p>
-<script type="text/javascript" src="Renderer.js"></script>
-<script type="text/javascript" src="Inputter.js"></script>
+<script type="text/javascript" src="./Renderer.js"></script>
+<script type="text/javascript" src="./Inputter.js"></script>
+<script type="text/javascript" src="./Player.js"></script>
+<script type="text/javascript" src="./Map.js"></script>
 <script type="text/javascript">
 (() => {
-    class MapTip {
-        static get STYLES() {
-            return {
-                BASE     : 'map',
-                FLOOR    : 'map-floor',
-                MT_LEFT  : 'map-mt-left',
-                MT_TOP   : 'map-mt-top',
-                MT_RIGHT : 'map-mt-right',
-                MT_BOTTOM: 'map-mt-bottom',
-                SKY      : 'map-sky'
-            }
-        }
-        
-        constructor(code, style) {
-            this.code = code
-            this.style = style
-            this.target = document.createElement('div')
-            this.target.classList.add(MapTip.STYLES.BASE)
-            this.target.classList.add(style)
-        }
-        
-        copy() {
-            return new MapTip(this.code, this.style)
-        }
-    }
-    
-    class Map {
-        static get TIPS() {
-            return {
-                FLOOR    : new MapTip('X', MapTip.STYLES.FLOOR),
-                MT_LEFT  : new MapTip('J', MapTip.STYLES.MT_LEFT),
-                MT_TOP   : new MapTip('A', MapTip.STYLES.MT_TOP),
-                MT_RIGHT : new MapTip('L', MapTip.STYLES.MT_RIGHT),
-                MT_BOTTOM: new MapTip('M', MapTip.STYLES.MT_BOTTOM),
-                SKY      : new MapTip('_', MapTip.STYLES.SKY)
-            }
-        }
-        
-        constructor(target, data) {
-            this.target = target
-            this.codes = data.trim().split("\n")
-            for (let i = 0; i < this.codes.length; i++) {
-                this.codes[i] = this.codes[i].trim()
-            }
-            
-            console.log(this.codes)
-            
-            for (let i = 0, line = this.codes[i]; i < this.codes.length; i++) {
-                line = this.codes[i]
-                for (let j = 0; j < line.length; j++) {
-                    const code = line.charAt(j)
-                    switch (code) {
-                        case Map.TIPS.FLOOR.code:
-                            let floor = Map.TIPS.FLOOR.copy().target
-                            floor.style.left = (j * 64) + 'px'
-                            floor.style.top = (i * 64) + 'px'
-                            this.target.appendChild(floor)
-                            break;
-                        case Map.TIPS.MT_LEFT.code:
-                            let mtLeft = Map.TIPS.MT_LEFT.copy().target
-                            mtLeft.style.left = (j * 64) + 'px'
-                            mtLeft.style.top = (i * 64) + 'px'
-                            this.target.appendChild(mtLeft)
-                            break;
-                        case Map.TIPS.MT_TOP.code:
-                            let mtTop = Map.TIPS.MT_TOP.copy().target
-                            mtTop.style.left = (j * 64) + 'px'
-                            mtTop.style.top = (i * 64) + 'px'
-                            this.target.appendChild(mtTop)
-                            break;
-                        case Map.TIPS.MT_RIGHT.code:
-                            let mtRight = Map.TIPS.MT_RIGHT.copy().target
-                            mtRight.style.left = (j * 64) + 'px'
-                            mtRight.style.top = (i * 64) + 'px'
-                            this.target.appendChild(mtRight)
-                            break;
-                        case Map.TIPS.MT_BOTTOM.code:
-                            let mtBottom = Map.TIPS.MT_BOTTOM.copy().target
-                            mtBottom.style.left = (j * 64) + 'px'
-                            mtBottom.style.top = (i * 64) + 'px'
-                            this.target.appendChild(mtBottom)
-                            break;
-                        case Map.TIPS.SKY.code:
-                            let sky = Map.TIPS.SKY.copy().target
-                            sky.style.left = (j * 64) + 'px'
-                            sky.style.top = (i * 64) + 'px'
-                            this.target.appendChild(sky)
-                            break;
-                    }
-                }
-            }
-            
-            target.style.display = 'block'
-        }
-        
-        render() {
-            
-        }
-    }
-    
-    class Player {
-        static get JUMP_SPEED() { return 0.2 }
-        static get GO() {
-            return {
-                WAITING: -1,
-                STEP: 8
-            }
-        }
-        static get DASH() {
-            return {
-                ON: 1.5,
-                OFF: 1.0
-            }
-        }
-        static get TURN() {
-            return {
-                RIGHT: 0,
-                LEFT: 1
-            }
-        }
-        static get STYLE_NAMES() {
-            return {
-                WAIT: 'player-wait',
-                GO: [
-                    'player-go1',
-                    'player-go1',
-                    'player-go2',
-                    'player-go2'
-                ],
-                GO1: 'player-go1',
-                GO2: 'player-go2',
-                JUMP: 'player-jump',
-                TURN: 'player-turn',
-                CROUCH: 'player-crouch'
-            }
-        }
-        
-        /**
-         * @param {object} target - DOM Element
-         */
-        constructor(target) {
-            this.target = target
-            this.position = {
-                x: window.innerWidth / 2 - 32,
-                y: 64 * 3
-            }
-            this.jump = {
-                y: 0,
-                point: 0.0,
-                height: -100
-            }
-            this.go = Player.GO.WAITING
-            this.turn = Player.TURN.RIGHT
-            this.dash = false
-            this.crouch = false
-            
-            this.target.style.display = 'block'
-        }
-        
-        /**
-         * スタイルのジャンプ状態を切り替える
-         * @param {boolean} on - ジャンプが有効かどうか
-         */
-        updateStyleToJump(on) {
-            if (on) {
-                this.target.classList.add(Player.STYLE_NAMES.JUMP)
-            } else {
-                this.target.classList.remove(Player.STYLE_NAMES.JUMP)
-            }
-        }
-        
-        /**
-         * スタイルの反転状態を切り替える
-         * @param {boolean} on - 反転が有効かどうか
-         */
-        updateStyleToTurn(on) {
-            if (on) {
-                this.target.classList.add(Player.STYLE_NAMES.TURN)
-            } else {
-                this.target.classList.remove(Player.STYLE_NAMES.TURN)
-            }
-        }
-        
-        /**
-         * スタイルのしゃがみ状態を切り替える
-         * @param {boolean} on - しゃがみが有効かどうか
-         */
-        updateStyleToCrouch(on) {
-            if (on) {
-                this.target.classList.add(Player.STYLE_NAMES.CROUCH)
-            } else {
-                this.target.classList.remove(Player.STYLE_NAMES.CROUCH)
-            }
-        }
-        
-        /**
-         * スタイルの移動状態をクリアする
-         */
-        updateStyleClearToGo() {
-            for (var i = 0; i < Player.STYLE_NAMES.GO.length; i++) {
-                this.target.classList.remove(Player.STYLE_NAMES.GO[i])
-            }
-        }
-        
-        /**
-         * スタイルの移動状態を切り替える
-         * @param {number} frame - フレーム数
-         */
-        updateStyleToGo(frame) {
-            if (frame === Player.GO.WAITING) {
-                this.updateStyleClearToGo()
-                this.target.classList.add(Player.STYLE_NAMES.WAIT)
-            } else {
-                this.updateStyleClearToGo()
-                this.target.classList.add(Player.STYLE_NAMES.GO[frame])
-            }
-        }
-        
-        doJump() {
-            if (this.jump.point === 0.0) {
-                this.jump.point = Player.JUMP_SPEED
-            }
-        }
-        
-        doJumping() {
-            if (this.jump.point === 0.0) {
-                return
-            }
-            
-            this.jump.y = Math.sin(this.jump.point += Player.JUMP_SPEED) * this.jump.height
-            
-            if (this.jump.y >= 0) {
-                this.jump.y = 0
-                this.jump.point = 0.0
-            }
-        }
-        
-        doGoToLeft() {
-            this.position.x -= Player.GO.STEP * (this.dash ? Player.DASH.ON : Player.DASH.OFF)
-            this.go = (this.go + (this.dash ? 2 : 1)) % Player.STYLE_NAMES.GO.length
-            this.turn = Player.TURN.LEFT
-        }
-        
-        doGoToRight() {
-            this.position.x += Player.GO.STEP * (this.dash ? Player.DASH.ON : Player.DASH.OFF)
-            this.go = (this.go + (this.dash ? 2 : 1)) % Player.STYLE_NAMES.GO.length
-            this.turn = Player.TURN.RIGHT
-        }
-        
-        input(keyState) {
-            if (keyState.jump) {
-                this.doJump()
-            }
-            this.doJumping()
-            
-            this.dash = keyState.dash
-            
-            if (keyState.left) {
-                this.doGoToLeft()
-            }
-            if (keyState.right) {
-                this.doGoToRight()
-            }
-            if (!keyState.left && !keyState.right) {
-                this.go = Player.GO.WAITING
-            }
-            
-            if (keyState.up) {
-                // ..
-            }
-            
-            this.crouch = keyState.down
-        }
-        
-        render() {
-            switch (this.turn) {
-                case Player.TURN.RIGHT:
-                    this.updateStyleToTurn(false)
-                    break;
-                case Player.TURN.LEFT:
-                    this.updateStyleToTurn(true)
-                    break;
-            }
-            
-            this.updateStyleToGo(this.go)
-            
-            if (this.jump.y < 0.0) {
-                this.updateStyleToJump(true)
-            } else {
-                this.updateStyleToJump(false)                
-            }
-            
-            if (this.crouch) {
-                this.updateStyleToCrouch(true)
-            } else {
-                this.updateStyleToCrouch(false)
-            }
-            
-            this.target.style.left = (this.position.x) + 'px'
-            this.target.style.top = (this.position.y + this.jump.y) + 'px'
-        }
-    }
-    
     class Main {
         static get FRAME_RATIO() { return 1000 / 24 }
 
         constructor() {
             const player = new Player(document.getElementById('player'))
             const map = new Map(document.getElementById('map-container'), `
-                ________________
-                ____A___________
-                ___JML____A___X_
-                __JMMML__JML_XX_
-                XXXXXXXXXXXXXXXX
+                X______________X
+                X______________X
+                X______________X
+                X_______XX_____X
+                X______XX______X
+                X_____XX_______X
+                X________X_____X
+                X___XXXXXX___A_X
+                X___________JMLX
+                X_XXXXXXXX_JMMMX
+                X_________JMMMMX
                 XXXXXXXXXXXXXXXX
             `)
             

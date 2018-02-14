@@ -14,59 +14,62 @@
     image-rendering: optimize-contrast;         /* CSS3 Proposed                    */
     -ms-interpolation-mode: nearest-neighbor;   /* IE8+                             */
 }
+body {
+    transform: scale(4.0);
+}
 .player {
     background-image: url(./player.gif);
-    background-size: 400%; /* 広い辺のチップ数 * 100% */
+    /*background-size: 400%; /* 広い辺のチップ数 * 100% */*/
     display: none;
-    width: 64px;
-    height: 64px;
+    width: 16px;
+    height: 16px;
 }
 .player-wait {
     background-position: 0 0;
 }
 .player-go1 {
-    background-position: -64px 0;
+    background-position: -16px 0;
 }
 .player-go2 {
-    background-position: -128px 0;    
+    background-position: -32px 0;    
 }
 .player-jump {
-    background-position: -192px 0;
+    background-position: -48px 0;
 }
 .player-crouch {
-    height: 32px;
+    height: 8px;
     background-size: 400% 100%;
-    margin-top: 32px;
+    margin-top: 8px;
 }
 .player-turn {
     transform: scale(-1, 1);
 }
 .map-container {
-    width: 800px;
+/*    width: 800px;
     height: 600px;
-    display: none;
+*/    display: none;
 }
 .map {
     background-image: url(./maptip.gif);
     background-size: 600%; /* 広い辺のチップ数 * 100% */
-    width: 64px;
-    height: 64px;
+    width: 16px;
+    height: 16px;
 }
 .map-floor {
     background-position: 0 0;
 }
 .map-mt-left {
-    background-position: -64px 0;
+    background-position: -16px 0;
 }
 .map-mt-top {
-    background-position: -128px 0;
+    background-position: -32px 0;
 }
 .map-mt-right {
-    background-position: -192px 0;
+    background-position: -48px 0;
 }
 .map-mt-bottom {
-    background-position: -256px 0;
+    background-position: -64px 0;
 }
 .map-sky {
-    background-position: -320px 0;
+    background-position: -80px 0;
 }

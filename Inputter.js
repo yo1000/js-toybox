@@ -20,12 +20,20 @@ class Inputter {
             down: false,
             dash: false,
             jump: false
-        }
+        },
+        this.jumping = false
         
         document.addEventListener('keydown', (event) => {
+            if (this.jumping) {
+                this.keyState.jump = false
+            }
+            
             switch (event.key) {
             case Inputter.KEY_MAP.JUMP:
-                this.keyState.jump = true
+                if (!this.jumping) {
+                    this.jumping = true
+                    this.keyState.jump = true
+                }
                 break
             case Inputter.KEY_MAP.DASH:
                 this.keyState.dash = true
@@ -52,6 +60,7 @@ class Inputter {
         document.addEventListener('keyup', (event) => {
             switch (event.key) {
             case Inputter.KEY_MAP.JUMP:
+                this.jumping = false
                 this.keyState.jump = false
                 break
             case Inputter.KEY_MAP.DASH:
