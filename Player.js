@@ -133,92 +133,25 @@ class Player {
             return
         }
         
-        this.pos(this.position.x, this.position.y + this.calcJumpToTopAdditions())
-    }
-    
-    doGoToLeft() {
-        this.go = (this.go + (this.dash ? 2 : 1)) % Player.STYLE_NAMES.GO.length
-        this.turn = Player.TURN.LEFT
-        this.pos(this.position.x - this.calcGoToLeftAdditions(), this.position.y)
-    }
-    
-    doGoToRight() {
-        this.go = (this.go + (this.dash ? 2 : 1)) % Player.STYLE_NAMES.GO.length
-        this.turn = Player.TURN.RIGHT
-        this.pos(this.position.x + this.calcGoToRightAdditions(), this.position.y)
-    }
-    
-    calcGoToLeftAdditions() {
-        const yTop = this.position.y + this.jump.y + 1
-        const yBottom = this.position.y + this.jump.y + 16 - 1
-        const x = this.position.x - Player.GO.STEP * Player.DASH.OFF + 1
-        const elmTop = document.elementFromPoint(x * 4, yTop * 4)
-        const elmBottom = document.elementFromPoint(x * 4, yBottom * 4)
-        
-        if (elmTop.hasAttribute(MapTip.TYPES.BLOCK)) {
-            return 0
-        }
-        if (elmBottom.hasAttribute(MapTip.TYPES.BLOCK)) {
-            return 0
-        }
-        
-        if (!this.dash) {
-            return Player.GO.STEP * Player.DASH.OFF
-        }
-        
-        const xDash = this.position.x - Player.GO.STEP * Player.DASH.ON + 1
-        const elmTopDash = document.elementFromPoint(xDash * 4, yTop * 4)
-        const elmBottomDash = document.elementFromPoint(xDash * 4, yBottom * 4)
-
-        if (elmTopDash.hasAttribute(MapTip.TYPES.BLOCK)) {
-            return Player.GO.STEP * Player.DASH.OFF
-        }
-        if (elmBottomDash.hasAttribute(MapTip.TYPES.BLOCK)) {
-            return Player.GO.STEP * Player.DASH.OFF
-        }
-        
-        return Player.GO.STEP * Player.DASH.ON
-    }
-    
-    calcGoToRightAdditions() {
-        const yTop = this.position.y + this.jump.y + 1
-        const yBottom = this.position.y + this.jump.y + 16 - 1
-        const x = this.position.x + Player.GO.STEP * Player.DASH.OFF + 16 - 1
-        const elmTop = document.elementFromPoint(x * 4, yTop * 4)
-        const elmBottom = document.elementFromPoint(x * 4, yBottom * 4)
-        
-        if (elmTop.hasAttribute(MapTip.TYPES.BLOCK)) {
-            return 0
-        }
-        if (elmBottom.hasAttribute(MapTip.TYPES.BLOCK)) {
-            return 0
-        }
-        
-        if (!this.dash) {
-            return Player.GO.STEP * Player.DASH.OFF
-        }
-        
-        const xDash = this.position.x + Player.GO.STEP * Player.DASH.ON + 16 -1
-        const elmTopDash = document.elementFromPoint(xDash * 4, yTop * 4)
-        const elmBottomDash = document.elementFromPoint(xDash * 4, yBottom * 4)
-
-        if (elmTopDash.hasAttribute(MapTip.TYPES.BLOCK)) {
-            return Player.GO.STEP * Player.DASH.OFF
-        }
-        if (elmBottomDash.hasAttribute(MapTip.TYPES.BLOCK)) {
-            return Player.GO.STEP * Player.DASH.OFF
-        }
-        
-        return Player.GO.STEP * Player.DASH.ON
-    }
-    
-    calcJumpToTopAdditions() {
         const jump = Math.sin(Math.PI * this.jump.point) * this.jump.height
         this.jump.point += Player.JUMP.RADIAN_UNIT
         if (this.jump.point > Player.JUMP.RADIAN_MAX) {
             this.jump.point = Player.JUMP.RADIAN_MIN
         }
-        return jump
+
+        this.pos(this.position.x, this.position.y + jump)
+    }
+    
+    doGoToLeft() {
+        this.go = (this.go + (this.dash ? 2 : 1)) % Player.STYLE_NAMES.GO.length
+        this.turn = Player.TURN.LEFT
+        this.pos(this.position.x - Player.GO.STEP * (this.dash ? Player.DASH.ON : Player.DASH.OFF), this.position.y)
+    }
+    
+    doGoToRight() {
+        this.go = (this.go + (this.dash ? 2 : 1)) % Player.STYLE_NAMES.GO.length
+        this.turn = Player.TURN.RIGHT
+        this.pos(this.position.x + Player.GO.STEP * (this.dash ? Player.DASH.ON : Player.DASH.OFF), this.position.y)
     }
     
     pos(newX, newY) {
@@ -241,6 +174,16 @@ class Player {
                 this.position.x = newX
             } else {
                 this.dash = false
+                const rect = xBottom.getBoundingClientRect()
+                
+                switch (xDir) {
+                    case 'L':
+                        this.position.x = rect.right / 4
+                        break;
+                    case 'R':
+                        this.position.x = rect.left / 4 - 16
+                        break;
+                }
             }
         }
 
