@@ -138,8 +138,8 @@ class Player {
         if (this.jump.point > Player.JUMP.RADIAN_MAX) {
             this.jump.point = Player.JUMP.RADIAN_MIN
         }
-
-        this.pos(this.position.x, this.position.y + jump)
+        
+        this.pos(this.position.x, this.position.y + Math.floor(jump))
     }
     
     doGoToLeft() {
@@ -218,19 +218,12 @@ class Player {
         // ジャンプから放物線の着地範囲を超えて継続落下する場合
         // 床が抜けて落下する場合
         if (!yDir && this.jump.point === 0.0) {
-            const xTop = document.elementFromPoint(
-                xDir === 'L' ? (newX) * 4 : (newX + 16) * 4,
-                (newY + 16 - 1) * 4)
+            const dash = (this.dash && this.go !== Player.GO.WAITING) ? 0 : 1
+            const leftBottom = document.elementFromPoint((newX + dash) * 4, (newY + 16) * 4)
+            const rightBottom = document.elementFromPoint((newX + 16 - dash) * 4, (newY + 16) * 4)
             
-            if (xTop.hasAttribute(MapTip.TYPES.BLOCK)) {
-                this.dash = false
-            }
-            
-            const yLeftBottom = document.elementFromPoint((newX + (this.dash ? 0 : 1)) * 4, (newY + 16) * 4)
-            const yRightBottom = document.elementFromPoint((newX + 16 - (this.dash ? 0 : 1)) * 4, (newY + 16) * 4)
-            
-            if (!yLeftBottom.hasAttribute(MapTip.TYPES.BLOCK) &&
-                !yRightBottom.hasAttribute(MapTip.TYPES.BLOCK)) {
+            if (!leftBottom.hasAttribute(MapTip.TYPES.BLOCK) &&
+                !rightBottom.hasAttribute(MapTip.TYPES.BLOCK)) {
                 this.jump.point = 1.425 // RADIAN_MAX * (3/4)
             }
         }
