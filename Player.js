@@ -236,12 +236,11 @@ class Player {
                 ? document.elementFromPoint((newX + 1) * 4, (newY - 1 + 16) * 4)
                 : document.elementFromPoint((newX - 1 + 16) * 4, (newY - 1 + 16) * 4)
             
-            // console.log(xTop)
-            // console.log(xBottom)
-            
             if (!xTop.hasAttribute(MapTip.TYPES.BLOCK) &&
                 !xBottom.hasAttribute(MapTip.TYPES.BLOCK)) {
                 this.position.x = newX
+            } else {
+                this.dash = false
             }
         }
 
@@ -274,9 +273,18 @@ class Player {
         }
         
         // ジャンプから放物線の着地範囲を超えて継続落下する場合
+        // 床が抜けて落下する場合
         if (!yDir && this.jump.point === 0.0) {
-            const yLeftBottom = document.elementFromPoint((newX + 1) * 4, (newY + 16) * 4)
-            const yRightBottom = document.elementFromPoint((newX + 16 - 1) * 4, (newY + 16) * 4)
+            const xTop = document.elementFromPoint(
+                xDir === 'L' ? (newX) * 4 : (newX + 16) * 4,
+                (newY + 16 - 1) * 4)
+            
+            if (xTop.hasAttribute(MapTip.TYPES.BLOCK)) {
+                this.dash = false
+            }
+            
+            const yLeftBottom = document.elementFromPoint((newX + (this.dash ? 0 : 1)) * 4, (newY + 16) * 4)
+            const yRightBottom = document.elementFromPoint((newX + 16 - (this.dash ? 0 : 1)) * 4, (newY + 16) * 4)
             
             if (!yLeftBottom.hasAttribute(MapTip.TYPES.BLOCK) &&
                 !yRightBottom.hasAttribute(MapTip.TYPES.BLOCK)) {
