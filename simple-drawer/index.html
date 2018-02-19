@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style type="text/css">
+body {
+    margin: 0;
+    overflow: hidden;
+}
+</style>
+</head>
+<body id="body">
+<script type="text/javascript">
+(() => {
+    const body = document.getElementById('body')
+    const canvas = document.createElement('canvas')
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+    body.appendChild(canvas)
+
+    const ctx = canvas.getContext('2d')
+    
+    let pos = {
+        start: {
+            x: -1,
+            y: -1
+        },
+        end: {
+            x: -1,
+            y: -1
+        }
+    }
+    let drawing = false
+
+    window.addEventListener('resize', (event) => {
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+    })
+    
+    window.addEventListener('mousedown', (event) => {
+        drawing = true
+
+        if (pos.end.x < 0 || pos.end.y < 0) {
+            pos.start.x = event.clientX
+            pos.start.y = event.clientY
+            
+            pos.end.x = event.clientX
+            pos.end.y = event.clientY
+        }
+    })
+    
+    window.addEventListener('mouseup', (event) => {
+        drawing = false
+        
+        pos.start.x = -1
+        pos.start.y = -1
+        
+        pos.end.x = -1
+        pos.end.y = -1
+    })
+    
+    window.addEventListener('mousemove', (event) => {
+        if (!drawing) {
+            return
+        }
+        
+        pos.start.x = pos.end.x
+        pos.start.y = pos.end.y
+        
+        pos.end.x = event.clientX
+        pos.end.y = event.clientY
+        
+        ctx.beginPath()
+        ctx.moveTo(pos.start.x, pos.start.y)
+        ctx.lineTo(pos.end.x, pos.end.y)
+        ctx.stroke()
+    })
+})()
+</script>
+</body>
+</html>
