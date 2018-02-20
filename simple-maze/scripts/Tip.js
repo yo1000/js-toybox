@@ -6,21 +6,25 @@ class Tip {
     static get TYPES() {
         return {
             BASE: {
+                name: 'BASE',
                 style: 'tip',
                 passable: true,
                 breakable: false
             },
             FLOOR: {
+                name: 'FLOOR',
                 style: 'floor',
                 passable: true,
                 breakable: false
             },
             STEEL: {
+                name: 'STEEL',
                 style: 'steel',
                 passable: false,
                 breakable: false
             },
             ROCK: {
+                name: 'ROCK',
                 style: 'rock',
                 passable: false,
                 breakable: true

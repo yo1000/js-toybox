@@ -7,10 +7,11 @@
 <body>
 <div id="maze-container"></div>
 <script type="text/javascript" src="./scripts/Tip.js"></script>
-<script type="text/javascript" src="./scripts/MazeBuilder.js"></script>
+<script type="text/javascript" src="./scripts/Maze.js"></script>
 <script type="text/javascript">
 (() => {
-    document.getElementById('maze-container').appendChild(new MazeBuilder(24, 16).build())
+    const maze = new Maze(24, 16)
+    document.getElementById('maze-container').appendChild(maze.build())
 })()
 </script>
 </body>
