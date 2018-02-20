@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="./styles/index.css">
+</head>
+<body>
+<div id="maze-container"></div>
+<script type="text/javascript" src="./scripts/Tip.js"></script>
+<script type="text/javascript" src="./scripts/MazeBuilder.js"></script>
+<script type="text/javascript">
+(() => {
+    document.getElementById('maze-container').appendChild(new MazeBuilder(24, 16).build())
+})()
+</script>
+</body>
+</html>
