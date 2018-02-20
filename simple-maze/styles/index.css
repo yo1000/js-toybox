@@ -32,3 +32,16 @@ body {
     border-color: #ddd;
     background-color: #ddd;
 }
+
+.player {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    background-color: #888;
+}
+
+.player-active {
+    z-index: 1;
+    background-color: #333;
+}

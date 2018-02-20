@@ -6,12 +6,54 @@
 </head>
 <body>
 <div id="maze-container"></div>
+<script type="text/javascript" src="./scripts/Position.js"></script>
 <script type="text/javascript" src="./scripts/Tip.js"></script>
 <script type="text/javascript" src="./scripts/Maze.js"></script>
+<script type="text/javascript" src="./scripts/Player.js"></script>
 <script type="text/javascript">
 (() => {
+    const KEY_MAP = {
+        LEFT: 'ArrowLeft',
+        RIGHT: 'ArrowRight',
+        UP: 'ArrowUp',
+        DOWN: 'ArrowDown'
+    }
+    
+    const mazeContainer = document.getElementById('maze-container')
     const maze = new Maze(24, 16)
-    document.getElementById('maze-container').appendChild(maze.build())
+    const player = new Player(1, 1)
+
+    mazeContainer.appendChild(maze.build())
+    mazeContainer.appendChild(player.element)
+    
+    window.addEventListener('keydown', (event) => {
+        switch (event.key) {
+            case KEY_MAP.LEFT:
+                if (maze.passable(player.getLeftPosition())) {
+                    mazeContainer.appendChild(player.copy().element)
+                    player.moveLeft()
+                }
+                break
+            case KEY_MAP.RIGHT:
+                if (maze.passable(player.getRightPosition())) {
+                    mazeContainer.appendChild(player.copy().element)
+                    player.moveRight()
+                }
+                break
+            case KEY_MAP.UP:
+                if (maze.passable(player.getUpPosition())) {
+                    mazeContainer.appendChild(player.copy().element)
+                    player.moveUp()
+                }
+                break
+            case KEY_MAP.DOWN:
+                if (maze.passable(player.getDownPosition())) {
+                    mazeContainer.appendChild(player.copy().element)
+                    player.moveDown()
+                }
+                break
+        }
+    })
 })()
 </script>
 </body>

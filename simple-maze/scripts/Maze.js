@@ -13,6 +13,12 @@ class Maze {
         }
     }
     
+    passable(position) {
+        if (!this.tips[position.y]) return false
+        if (!this.tips[position.y][position.x]) return false
+        return this.tips[position.y][position.x].passable
+    }
+    
     build() {
         const containerElement = document.createElement('div')
         containerElement.classList.add('maze-container')
