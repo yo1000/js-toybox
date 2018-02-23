@@ -19,12 +19,17 @@
         DOWN: 'ArrowDown'
     }
 
+    const SIZE = {
+        width: 24,
+        height: 16
+    }
+
     const mazeCanvas = document.getElementById('maze-canvas')
-    mazeCanvas.width = window.innerWidth
-    mazeCanvas.height = window.innerHeight
+    mazeCanvas.width = (SIZE.width + 1) * 32
+    mazeCanvas.height = (SIZE.height + 1) * 32
 
     const context2d = mazeCanvas.getContext('2d')
-    const maze = new Maze(context2d, 24, 16)
+    const maze = new Maze(context2d, SIZE.width, SIZE.height)
     maze.draw()
 
     const player = new Player(context2d, 1, 1)
