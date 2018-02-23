@@ -1,0 +1,48 @@
+body {
+    overflow: hidden;
+}
+
+.maze-container {
+    font-size: 0;
+    background-color: #ddd;
+}
+
+.tip {
+    width: 24px;
+    height: 24px;
+    border: #fff 4px solid;
+    display: inline-block;
+}
+
+.steel {
+    border-color: #aaa #777 #666 #999;
+    background-color: #888;
+}
+
+.rock {
+    border-color: #cba #987 #876 #ba9;
+    background-color: #a98;
+    
+    width: 16px;
+    height: 16px;
+    margin: 4px;
+    border-radius: 8px;
+}
+
+.floor {
+    border-color: #ddd;
+    background-color: #ddd;
+}
+
+.player {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    background-color: #888;
+}
+
+.player-active {
+    z-index: 1;
+    background-color: #333;
+}

@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="./styles/index.css">
+</head>
+<body>
+<canvas id="maze-canvas"></canvas>
+<script type="text/javascript" src="./scripts/Position.js"></script>
+<script type="text/javascript" src="./scripts/Tip.js"></script>
+<script type="text/javascript" src="./scripts/Maze.js"></script>
+<script type="text/javascript" src="./scripts/Player.js"></script>
+<script type="text/javascript">
+(() => {
+    const KEY_MAP = {
+        LEFT: 'ArrowLeft',
+        RIGHT: 'ArrowRight',
+        UP: 'ArrowUp',
+        DOWN: 'ArrowDown'
+    }
+
+    const mazeCanvas = document.getElementById('maze-canvas')
+    mazeCanvas.width = window.innerWidth
+    mazeCanvas.height = window.innerHeight
+
+    const context2d = mazeCanvas.getContext('2d')
+    const maze = new Maze(context2d, 24, 16)
+    maze.draw()
+
+    const player = new Player(context2d, 1, 1)
+    window.addEventListener('keydown', (event) => {
+        switch (event.key) {
+            case KEY_MAP.LEFT:
+                if (maze.passable(player.getLeftPosition())) {
+                    player.moveLeft()
+                }
+                break
+            case KEY_MAP.RIGHT:
+                if (maze.passable(player.getRightPosition())) {
+                    player.moveRight()
+                }
+                break
+            case KEY_MAP.UP:
+                if (maze.passable(player.getUpPosition())) {
+                    player.moveUp()
+                }
+                break
+            case KEY_MAP.DOWN:
+                if (maze.passable(player.getDownPosition())) {
+                    player.moveDown()
+                }
+                break
+        }
+    })
+})()
+</script>
+</body>
+</html>
