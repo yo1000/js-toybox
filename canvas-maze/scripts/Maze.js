@@ -37,7 +37,23 @@ class Maze {
         if (!this.tips[position.y][position.x]) return false
         return this.tips[position.y][position.x].passable
     }
-    
+
+    checkEmptyTip(x, y) {
+        return !this.tips[y][x] || this.tips[y][x].passable
+    }
+
+    checkClosedInTipForLeft(x, y) {
+        return this.tips[y - 1][x] && !this.tips[y - 1][x].passable &&
+            this.tips[y][x + 1] && !this.tips[y][x + 1].passable &&
+            this.tips[y][x - 1] && !this.tips[y][x - 1].passable
+    }
+
+    checkClosedInTipForTop(x, y) {
+        return this.tips[y + 1][x] && !this.tips[y + 1][x].passable &&
+            this.tips[y - 1][x] && !this.tips[y - 1][x].passable &&
+            this.tips[y][x - 1] && !this.tips[y][x - 1].passable
+    }
+
     draw() {
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
@@ -48,17 +64,23 @@ class Maze {
                     this.tips[y][x] = Maze.TYPES.BLOCK
                     let nx = x
                     let ny = y
-                    while (this.tips[ny][nx] && this.tips[ny][nx].code !== Maze.TYPES.FLOOR.code) {
+                    while (!this.checkEmptyTip(nx, ny)) {
                         nx = x
                         ny = y
                         switch (Math.floor(Math.random() * 4)) {
                         case 0:
+                            if (this.checkClosedInTipForLeft(nx - 1, ny - 1)) {
+                                continue
+                            }
                             nx -= 1
                             break;
                         case 1:
                             nx += 1
                             break;
                         case 2:
+                            if (this.checkClosedInTipForTop(nx - 1, ny - 1)) {
+                                continue
+                            }
                             ny -= 1
                             break;
                         case 3:
