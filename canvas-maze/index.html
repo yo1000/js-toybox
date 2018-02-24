@@ -9,6 +9,7 @@
 <script type="text/javascript" src="./scripts/Position.js"></script>
 <script type="text/javascript" src="./scripts/Tip.js"></script>
 <script type="text/javascript" src="./scripts/Maze.js"></script>
+<script type="text/javascript" src="./scripts/BoTaoshiMaze.js"></script>
 <script type="text/javascript" src="./scripts/Player.js"></script>
 <script type="text/javascript">
 (() => {
@@ -26,6 +27,8 @@
         height: 16
     }
 
+    let mazeType = '' // b: BoTaoshiMaze, (else): Maze
+
     for (let i = 0; i < queries.length; i++) {
         const pairs = queries[i].split('=')
         if (pairs && pairs.length === 2) {
@@ -33,6 +36,8 @@
                 size.width = Number(pairs[1])
             } else if (pairs[0] === 'h') {
                 size.height = Number(pairs[1])
+            } else if (pairs[0] === 'm') {
+                mazeType = pairs[1]
             }
         }
     }
@@ -42,7 +47,10 @@
     mazeCanvas.height = (size.height + 1) * 32
 
     const context2d = mazeCanvas.getContext('2d')
-    const maze = new Maze(context2d, size.width, size.height)
+    const maze = (mazeType === 'b')
+        ? new BoTaoshiMaze(context2d, size.width, size.height)
+        : new Maze(context2d, size.width, size.height)
+
     maze.generateAndDraw()
 
     const player = new Player(context2d, 1, 1)
