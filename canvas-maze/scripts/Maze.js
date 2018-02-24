@@ -54,7 +54,7 @@ class Maze {
             this.tips[y][x - 1] && !this.tips[y][x - 1].passable
     }
 
-    draw() {
+    generate() {
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
                 if (y === 0 || y + 1 === this.height ||
@@ -68,24 +68,24 @@ class Maze {
                         nx = x
                         ny = y
                         switch (Math.floor(Math.random() * 4)) {
-                        case 0:
-                            if (this.checkClosedInTipForLeft(nx - 1, ny - 1)) {
-                                continue
-                            }
-                            nx -= 1
-                            break;
-                        case 1:
-                            nx += 1
-                            break;
-                        case 2:
-                            if (this.checkClosedInTipForTop(nx - 1, ny - 1)) {
-                                continue
-                            }
-                            ny -= 1
-                            break;
-                        case 3:
-                            ny += 1
-                            break;
+                            case 0:
+                                if (this.checkClosedInTipForLeft(nx - 1, ny - 1)) {
+                                    continue
+                                }
+                                nx -= 1
+                                break;
+                            case 1:
+                                nx += 1
+                                break;
+                            case 2:
+                                if (this.checkClosedInTipForTop(nx - 1, ny - 1)) {
+                                    continue
+                                }
+                                ny -= 1
+                                break;
+                            case 3:
+                                ny += 1
+                                break;
                         }
                     }
                     this.tips[ny][nx] = Maze.TYPES.BLOCK
@@ -96,7 +96,9 @@ class Maze {
                 }
             }
         }
+    }
 
+    draw() {
         for (let y = 0; y < this.tips.length; y++) {
             for (let x = 0; x < this.tips[y].length; x++) {
                 switch (this.tips[y][x].code) {
@@ -109,5 +111,10 @@ class Maze {
                 }
             }
         }
+    }
+
+    generateAndDraw() {
+        this.generate()
+        this.draw()
     }
 }

@@ -43,7 +43,7 @@
 
     const context2d = mazeCanvas.getContext('2d')
     const maze = new Maze(context2d, size.width, size.height)
-    maze.draw()
+    maze.generateAndDraw()
 
     const player = new Player(context2d, 1, 1)
     window.addEventListener('keydown', (event) => {
